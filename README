@@ -1,0 +1,25 @@
+Trimmomatic
+===========
+
+This directory contains the code of Trimmomatic, a  flexible read trimming
+tool for Illumina NGS data. The official maintainer is Anthony Bolger and the
+official web page is here:
+http://www.usadellab.org/cms/index.php?page=trimmomatic
+
+As the code is available under the GPL, and I, Timothée Flutre, needed to make
+a few changes, I started working on version 0.33 of the tool, just after
+versioning it with git.
+
+
+Installation
+============
+
+For the impatients:
+	make
+	make check
+	make install
+
+By default everything is installed in a directory bin/ in ${HOME}. 
+If the bin/ directory does not exist, it will be created.
+To install elsewhere, use the option INSTALL, for instance: 
+	make install INSTALL="/usr/local/"
