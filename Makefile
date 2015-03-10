@@ -1,11 +1,13 @@
 # http://semver.org/
-VERSION=0.33.0
-INSTALL=${HOME}
+VERSION := 0.33.0
+INSTALL := ${HOME}
+SOURCES := $(shell find src/ -name "*.java" | sed 's|src/||g')
 
 all:
-	cd src/; \
-	javac -classpath ".:../lib/jbzip2-0.9.jar" org/usadellab/trimmomatic/*.java; \
-	jar cmf ../MANIFEST.MF trimmomatic.jar org/usadellab/trimmomatic/*
+	rm -rf classes; mkdir -p classes/; \
+	cd src/; javac -classpath ".:../lib/jbzip2-0.9.jar" -d ../classes ${SOURCES}; \
+	cd ../classes; jar xf ../lib/jbzip2-0.9.jar; \
+	jar cmf ../MANIFEST.MF trimmomatic.jar ./
 
 check:
 	@echo "this package doesn't have any test (yet)"
@@ -23,5 +25,4 @@ dist:
 	rm -rf trimmomatic-${VERSION}
 
 clean:
-	find src/org/usadellab/trimmomatic/ -name "*.class" -exec rm -f {} \;
-	rm -f src/trimmomatic.jar
+	rm -rf classes/
