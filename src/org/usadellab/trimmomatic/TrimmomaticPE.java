@@ -1,8 +1,11 @@
 package org.usadellab.trimmomatic;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.OutputStream;
+import java.util.zip.GZIPOutputStream;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Future;
@@ -20,6 +23,8 @@ import org.usadellab.trimmomatic.threading.TrimLogWorker;
 import org.usadellab.trimmomatic.threading.TrimStatsWorker;
 import org.usadellab.trimmomatic.trim.Trimmer;
 import org.usadellab.trimmomatic.trim.TrimmerFactory;
+
+import org.itadaki.bzip2.BZip2OutputStream;
 
 public class TrimmomaticPE extends Trimmomatic
 {
@@ -286,9 +291,23 @@ public class TrimmomaticPE extends Trimmomatic
 
 		PrintStream trimLogStream = null;
 		if (trimLog != null)
+    {
 			// trimLogStream=new PrintStream(new BufferedOutputStream(new
 			// FileOutputStream(trimLog),1000000),false);
-			trimLogStream = new PrintStream(trimLog);
+			// trimLogStream = new PrintStream(trimLog);
+      OutputStream trimLogOutStream = new FileOutputStream(trimLog);
+      String trimLogName = trimLog.getName();
+      if(trimLogName.endsWith(".gz"))
+      {
+        trimLogOutStream = new GZIPOutputStream(trimLogOutStream);
+      }
+      else if (trimLogName.endsWith(".bz2"))
+      {
+        trimLogOutStream = new BZip2OutputStream(trimLogOutStream);
+      }
+      trimLogStream=new PrintStream(trimLogOutStream);
+    }
+
 
 		if (threads == 1)
 			processSingleThreaded(parser1, parser2, serializer1P, serializer1U, serializer2P, serializer2U, trimmers,
