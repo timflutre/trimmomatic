@@ -14,7 +14,7 @@ check:
 
 install: 
 	mkdir -p ${INSTALL}/bin
-	cp src/trimmomatic.jar ${INSTALL}/bin/
+	cp classes/trimmomatic.jar ${INSTALL}/bin/
 
 dist:
 	mkdir -p trimmomatic-${VERSION}
